@@ -133,12 +133,42 @@ def get_random():
         print('Random', num)
         t = time.time()
         imgs, vectors, labels = create_random_images(num, max_classes=3)
-        print('Finished in', time.time()-t)
+        print('Finished pouin', time.time()-t)
+
+        t = time.time()
+        new_vectors, new_labels = interpolate(12, vectors[0], vectors[1], labels[0], labels[1])
+        new_ims = sample(new_vectors, new_labels)
+        print('interpolated in', time.time()-t)
+                 
         response = jsonify([
             [ encode_img(arr) for arr in imgs ],
             vectors.tolist(),
             labels.tolist()
         ])
+        return response
+    except Exception as e:
+        print(e)
+        return '', 500
+
+@app.route('/random', methods=['GET'])
+def get_random_get():
+    try:
+        num = 2
+        print('Random', num)
+        t = time.time()
+        imgs, vectors, labels = create_random_images(num, max_classes=3)
+        #print("vectors", vectors)
+        #print("labels", np.asarray(labels).shape)
+        print('Finished iaan', time.time()-t)
+        
+        t = time.time()
+        new_vectors, new_labels = interpolate(3, vectors[0], vectors[1], labels[0], labels[1])
+        new_ims = sample(new_vectors, new_labels)
+        print('interpolated in', time.time()-t)
+        
+
+
+        response = ''.join([ f'<img src="{encode_img(arr)}">' for arr in imgs ])
         return response
     except Exception as e:
         print(e)

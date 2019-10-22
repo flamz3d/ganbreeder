@@ -30,6 +30,7 @@ app.set('view engine', 'pug')
 app.set('views', 'public')
 
 app.get('/i', async (req, res) => {
+    console.log("i")
     const key = req.query.k
     if (!key) return res.sendStatus(404)
     const { id, vector, label, parent1 } = await knex.from('image').where({ key }).first()
@@ -42,6 +43,7 @@ app.get('/i', async (req, res) => {
 })
 
 app.get('/info', async (req, res) => {
+    console.log("info")
     const key = req.query.k
     if (!key) return res.sendStatus(404)
     const { vector, label } = await knex.from('image').where({ key }).first()
@@ -49,13 +51,16 @@ app.get('/info', async (req, res) => {
 })
 
 app.get('/', async (req, res) => {
+    console.log("/")
     try {
         /* Provide a mix of starred and raw images.
         */
+        console.log("allo")
         const keys_1 = random_slice(memcache['raw'], 6)
         const keys_2 = random_slice(memcache['starred'], 6)
         const keys = keys_1.concat(keys_2)
         const count = memcache['count']
+        console.log(keys, count);
         res.render('random.pug', { keys, count })
     } catch(err) {
         console.log('Error: /', { err })
@@ -67,6 +72,7 @@ app.get('/starred', (req, res) => res.render('starred'))
 app.get('/mix', (req, res) => res.render('mix'))
 
 app.get('/latest', async (req, res) => {
+    console.log("latest") 
     const page = req.query.page || 0
     try {
         const images = await knex.
@@ -85,6 +91,7 @@ app.get('/latest', async (req, res) => {
 })
 
 app.get('/lineage', async (req, res) => {
+    console.log("lineage")
     const key = req.query.k
     if (!key) return res.sendStatus(404)
     try {
@@ -107,6 +114,7 @@ app.get('/lineage', async (req, res) => {
 })
 
 app.post('/image_children', async (req, res) => {
+    console.log("image_children")
     const key = req.body.key
     if (!key) return res.sendStatus(404)
     try {
@@ -145,6 +153,7 @@ app.post('/image_children', async (req, res) => {
 })
 
 app.post('/mix_images', async (req, res) => {
+    console.log("mix_images")
     const key1 = req.body.key1
     const key2 = req.body.key2
     if (!key1 || !key2) return res.sendStatus(400)
@@ -179,6 +188,7 @@ app.post('/mix_images', async (req, res) => {
 })
 
 app.post('/star', async (req, res) => {
+    console.log("star")
     const key = req.body.key
     if (!key) return res.sendStatus(400)
     try {
